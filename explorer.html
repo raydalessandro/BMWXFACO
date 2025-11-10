@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="BMW Motorrad Explorer - Maps & Places">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <title>BMW Motorrad Explorer</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="explorer-styles.css">
+</head>
+<body>
+    <!-- App Container -->
+    <div id="app" class="app">
+        
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-logo">
+                    <svg class="bmw-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="40" height="40">
+                        <circle cx="50" cy="50" r="48" fill="white" stroke="black" stroke-width="2"/>
+                        <path d="M 50 50 L 50 4 A 46 46 0 0 1 96 50 Z" fill="white"/>
+                        <path d="M 50 50 L 96 50 A 46 46 0 0 1 50 96 Z" fill="#0066B1"/>
+                        <path d="M 50 50 L 50 96 A 46 46 0 0 1 4 50 Z" fill="white"/>
+                        <path d="M 50 50 L 4 50 A 46 46 0 0 1 50 4 Z" fill="#0066B1"/>
+                    </svg>
+                    <span class="app-name">EXPLORER</span>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-icon-small" onclick="goBackToMain()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 19l-7-7m0 0l7-7m-7 7h18"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- Map Screen -->
+            <section id="mapScreen" class="screen active">
+                <div class="map-container">
+                    <div id="mainMap" class="main-map"></div>
+                    <div class="map-controls">
+                        <button class="map-btn" onclick="centerMapOnUser()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                            </svg>
+                        </button>
+                        <button class="map-btn" onclick="toggleMapStyle()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5z"/>
+                            </svg>
+                        </button>
+                        <button class="map-btn" onclick="showTripsList()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Trips Filter Panel -->
+                <div id="tripsPanel" class="trips-panel">
+                    <div class="panel-header">
+                        <h3>VIAGGI SULLA MAPPA</h3>
+                        <button class="btn-close" onclick="closeTripsList()">×</button>
+                    </div>
+                    <div class="trips-filter">
+                        <button class="filter-btn active" onclick="filterTrips('all')">Tutti</button>
+                        <button class="filter-btn" onclick="filterTrips('recent')">Recenti</button>
+                        <button class="filter-btn" onclick="filterTrips('favorite')">Preferiti</button>
+                    </div>
+                    <div id="mapTripsList" class="map-trips-list">
+                        <!-- Trips will be loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Restaurants Screen -->
+            <section id="restaurantsScreen" class="screen">
+                <div class="screen-header-official">
+                    <h2 class="screen-title">RISTORANTI</h2>
+                    <button class="btn-icon-official" onclick="showAddRestaurant()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="restaurants-filters">
+                    <div class="filter-chips">
+                        <button class="chip active" onclick="filterRestaurants('all')">Tutti</button>
+                        <button class="chip" onclick="filterRestaurants('5stars')">⭐ Top</button>
+                        <button class="chip" onclick="filterRestaurants('pizza')">🍕 Pizza</button>
+                        <button class="chip" onclick="filterRestaurants('traditional')">🍝 Tipico</button>
+                        <button class="chip" onclick="filterRestaurants('quick')">⚡ Veloce</button>
+                    </div>
+                </div>
+                
+                <div id="restaurantsList" class="restaurants-list">
+                    <!-- Restaurants will be loaded here -->
+                </div>
+                
+                <div id="emptyRestaurants" class="empty-state-official" style="display: none;">
+                    <span class="empty-icon">🍽️</span>
+                    <p class="empty-text">Nessun ristorante salvato</p>
+                    <button class="btn btn-primary" onclick="showAddRestaurant()">
+                        AGGIUNGI RISTORANTE
+                    </button>
+                </div>
+            </section>
+
+            <!-- Community Screen -->
+            <section id="communityScreen" class="screen">
+                <div class="screen-header-official">
+                    <h2 class="screen-title">COMMUNITY</h2>
+                    <button class="btn-icon-official" onclick="showAddLink()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="link-categories">
+                    <div class="category-section">
+                        <h3 class="category-title">FORUM & COMMUNITY</h3>
+                        <div id="forumLinks" class="links-grid">
+                            <!-- Preset BMW forums -->
+                            <a href="https://www.bmw-motorrad.com" target="_blank" class="link-card preset">
+                                <span class="link-icon">🏍️</span>
+                                <span class="link-name">BMW Motorrad Official</span>
+                            </a>
+                            <a href="https://www.advrider.com" target="_blank" class="link-card preset">
+                                <span class="link-icon">🌍</span>
+                                <span class="link-name">ADV Rider Forum</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="category-section">
+                        <h3 class="category-title">RISORSE UTILI</h3>
+                        <div id="resourceLinks" class="links-grid">
+                            <!-- User added links -->
+                        </div>
+                    </div>
+                    
+                    <div class="category-section">
+                        <h3 class="category-title">I MIEI LINK</h3>
+                        <div id="customLinks" class="links-grid">
+                            <!-- User custom links -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tools Screen -->
+            <section id="toolsScreen" class="screen">
+                <div class="screen-header-official">
+                    <h2 class="screen-title">TOOLS</h2>
+                </div>
+                
+                <div class="tools-grid">
+                    <div class="tool-card" onclick="showTireCalculator()">
+                        <span class="tool-icon">⚙️</span>
+                        <span class="tool-name">Pressione Gomme</span>
+                        <span class="tool-desc">Calcola la pressione ideale</span>
+                    </div>
+                    
+                    <div class="tool-card" onclick="showFuelCalculator()">
+                        <span class="tool-icon">⛽</span>
+                        <span class="tool-name">Autonomia</span>
+                        <span class="tool-desc">Calcola km rimanenti</span>
+                    </div>
+                    
+                    <div class="tool-card" onclick="showPackingList()">
+                        <span class="tool-icon">🎒</span>
+                        <span class="tool-name">Checklist Viaggio</span>
+                        <span class="tool-desc">Lista preparazione</span>
+                    </div>
+                    
+                    <div class="tool-card" onclick="showWeather()">
+                        <span class="tool-icon">🌤️</span>
+                        <span class="tool-name">Meteo Percorso</span>
+                        <span class="tool-desc">Previsioni sul tragitto</span>
+                    </div>
+                    
+                    <div class="tool-card" onclick="showEmergency()">
+                        <span class="tool-icon">🆘</span>
+                        <span class="tool-name">Numeri Utili</span>
+                        <span class="tool-desc">Emergenze e assistenza</span>
+                    </div>
+                    
+                    <div class="tool-card" onclick="showConverter()">
+                        <span class="tool-icon">🔄</span>
+                        <span class="tool-name">Convertitore</span>
+                        <span class="tool-desc">Miglia/Km, PSI/Bar</span>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav-official">
+            <button class="nav-item active" onclick="showScreen('mapScreen')" data-screen="mapScreen">
+                <span class="nav-icon">MAPPA</span>
+            </button>
+            <button class="nav-item" onclick="showScreen('restaurantsScreen')" data-screen="restaurantsScreen">
+                <span class="nav-icon">RISTORANTI</span>
+            </button>
+            <button class="nav-item" onclick="showScreen('communityScreen')" data-screen="communityScreen">
+                <span class="nav-icon">COMMUNITY</span>
+            </button>
+            <button class="nav-item" onclick="showScreen('toolsScreen')" data-screen="toolsScreen">
+                <span class="nav-icon">TOOLS</span>
+            </button>
+        </nav>
+
+    </div>
+
+    <!-- Add Restaurant Modal -->
+    <div id="addRestaurantModal" class="modal">
+        <div class="modal-content-official">
+            <div class="modal-header">
+                <h3>NUOVO RISTORANTE</h3>
+                <button class="btn-close" onclick="closeModal('addRestaurantModal')">×</button>
+            </div>
+            <form id="addRestaurantForm" class="form">
+                <div class="form-group">
+                    <label>NOME</label>
+                    <input type="text" id="restaurantName" placeholder="Es: Osteria del Borgo" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>LOCALITÀ</label>
+                    <input type="text" id="restaurantLocation" placeholder="Es: Modena" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>TIPO</label>
+                    <select id="restaurantType" required>
+                        <option value="pizza">🍕 Pizzeria</option>
+                        <option value="traditional">🍝 Tradizionale</option>
+                        <option value="quick">⚡ Fast Food</option>
+                        <option value="gourmet">🍷 Gourmet</option>
+                        <option value="bar">☕ Bar/Caffè</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>VALUTAZIONE</label>
+                    <div class="rating-selector">
+                        <button type="button" class="star" data-rating="1">⭐</button>
+                        <button type="button" class="star" data-rating="2">⭐</button>
+                        <button type="button" class="star" data-rating="3">⭐</button>
+                        <button type="button" class="star" data-rating="4">⭐</button>
+                        <button type="button" class="star" data-rating="5">⭐</button>
+                    </div>
+                    <input type="hidden" id="restaurantRating" value="3">
+                </div>
+                
+                <div class="form-group">
+                    <label>NOTE</label>
+                    <textarea id="restaurantNotes" placeholder="Piatti consigliati, parcheggio moto..." rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>POSIZIONE (Opzionale)</label>
+                    <button type="button" class="btn btn-secondary btn-block" onclick="getRestaurantLocation()">
+                        📍 USA POSIZIONE ATTUALE
+                    </button>
+                    <input type="hidden" id="restaurantLat">
+                    <input type="hidden" id="restaurantLng">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-block">SALVA RISTORANTE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Link Modal -->
+    <div id="addLinkModal" class="modal">
+        <div class="modal-content-official">
+            <div class="modal-header">
+                <h3>NUOVO LINK</h3>
+                <button class="btn-close" onclick="closeModal('addLinkModal')">×</button>
+            </div>
+            <form id="addLinkForm" class="form">
+                <div class="form-group">
+                    <label>NOME</label>
+                    <input type="text" id="linkName" placeholder="Es: Forum GS Riders" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>URL</label>
+                    <input type="url" id="linkUrl" placeholder="https://..." required>
+                </div>
+                
+                <div class="form-group">
+                    <label>CATEGORIA</label>
+                    <select id="linkCategory" required>
+                        <option value="forum">Forum</option>
+                        <option value="resource">Risorsa</option>
+                        <option value="custom">Personale</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>ICONA</label>
+                    <div class="icon-selector">
+                        <button type="button" class="icon-btn" data-icon="🏍️">🏍️</button>
+                        <button type="button" class="icon-btn" data-icon="🔧">🔧</button>
+                        <button type="button" class="icon-btn" data-icon="🗺️">🗺️</button>
+                        <button type="button" class="icon-btn" data-icon="📱">📱</button>
+                        <button type="button" class="icon-btn" data-icon="💬">💬</button>
+                        <button type="button" class="icon-btn selected" data-icon="🔗">🔗</button>
+                    </div>
+                    <input type="hidden" id="linkIcon" value="🔗">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-block">SALVA LINK</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- App Scripts -->
+    <script src="explorer-db.js"></script>
+    <script src="explorer-app.js"></script>
+</body>
+</html>
