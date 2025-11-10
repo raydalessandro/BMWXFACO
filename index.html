@@ -260,7 +260,14 @@
                     </div>
                 </div>
             </section>
-
+// Funzione per aprire Explorer
+function openExplorer() {
+    // Salva lo stato corrente se necessario
+    localStorage.setItem('returnFromExplorer', 'true');
+    
+    // Apri Explorer
+    window.location.href = 'explorer.html';
+}
         </main>
 
         <!-- Bottom Navigation -->
