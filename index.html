@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#0066B1">
-    <meta name="description" content="BMW Soul - Il tuo copilota digitale personale">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="BMW Motorrad - R 850 GS Companion App">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
-    <title>BMW Soul</title>
+    <title>BMW Motorrad</title>
     
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="https://www.bmw.com/etc/designs/bmwcom/favicon.ico">
@@ -24,8 +24,8 @@
         <header class="header">
             <div class="header-content">
                 <div class="header-logo">
-                    <img src="https://www.bmw.com/content/dam/bmw/marketBMWCOM/bmw_com/categories/Innovation/mes/bmw-logo.png" alt="BMW" class="bmw-logo">
-                    <span class="app-name">Soul</span>
+                    <img src="bmw-logo.svg" alt="BMW" class="bmw-logo">
+                    <span class="app-name">MOTORRAD</span>
                 </div>
                 <div class="header-stats">
                     <div class="stat-item">
@@ -43,40 +43,21 @@
         <!-- Main Content -->
         <main class="main-content" id="mainContent">
             
-            <!-- Welcome Screen (mostrato solo al primo avvio) -->
+            <!-- Welcome Screen -->
             <section id="welcomeScreen" class="screen active">
                 <div class="welcome-container">
                     <div class="welcome-hero">
-                        <img src="https://www.bmw.com/content/dam/bmw/marketBMWCOM/bmw_com/categories/Innovation/mes/bmw-logo.png" alt="BMW" class="welcome-logo">
-                        <h1 class="welcome-title">BMW Soul</h1>
-                        <p class="welcome-subtitle">Il tuo copilota digitale personale</p>
+                        <img src="bmw-logo.svg" alt="BMW" class="welcome-logo">
+                        <h1 class="welcome-title">BMW MOTORRAD</h1>
+                        <p class="welcome-subtitle">R 850 GS Companion</p>
                     </div>
                     
-                    <div class="feature-list">
-                        <div class="feature-item">
-                            <span class="feature-icon">🏍️</span>
-                            <span class="feature-text">Diario viaggi personale</span>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">🔧</span>
-                            <span class="feature-text">Tracking manutenzioni</span>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">⛽</span>
-                            <span class="feature-text">Gestione rifornimenti</span>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">📊</span>
-                            <span class="feature-text">Statistiche dettagliate</span>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">🔒</span>
-                            <span class="feature-text">100% locale - Zero cloud</span>
-                        </div>
+                    <div class="bike-showcase">
+                        <img src="bmw-r850-gs.png" alt="BMW R 850 GS" class="bike-image">
                     </div>
                     
                     <button class="btn btn-primary btn-large" onclick="startSetup()">
-                        Inizia →
+                        START
                     </button>
                 </div>
             </section>
@@ -84,49 +65,40 @@
             <!-- Setup Screen -->
             <section id="setupScreen" class="screen">
                 <div class="setup-container">
-                    <h2 class="screen-title">Configura la tua BMW</h2>
+                    <div class="screen-header-official">
+                        <h2 class="screen-title">CONFIGURAZIONE</h2>
+                    </div>
                     
                     <form id="setupForm" class="form">
                         <div class="form-group">
-                            <label for="riderName">Il tuo nome</label>
-                            <input type="text" id="riderName" placeholder="Es: Marco" required>
+                            <label for="riderName">PILOTA</label>
+                            <input type="text" id="riderName" placeholder="Nome" required>
                         </div>
                         
                         <div class="form-group">
-                            <label for="bikeModel">Modello moto</label>
+                            <label for="bikeModel">MODELLO</label>
                             <select id="bikeModel" required>
-                                <option value="">Seleziona...</option>
+                                <option value="R 850 GS" selected>R 850 GS</option>
+                                <option value="R 1200 GS">R 1200 GS</option>
                                 <option value="R 1250 GS">R 1250 GS</option>
                                 <option value="R 1250 GS Adventure">R 1250 GS Adventure</option>
                                 <option value="R 1300 GS">R 1300 GS</option>
-                                <option value="S 1000 RR">S 1000 RR</option>
-                                <option value="S 1000 XR">S 1000 XR</option>
-                                <option value="F 900 R">F 900 R</option>
-                                <option value="F 900 XR">F 900 XR</option>
-                                <option value="R 1250 RT">R 1250 RT</option>
-                                <option value="K 1600 GT">K 1600 GT</option>
-                                <option value="R 18">R 18</option>
-                                <option value="Other">Altro modello BMW</option>
                             </select>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="bikeYear">Anno</label>
-                            <input type="number" id="bikeYear" placeholder="2023" min="2000" max="2025" required>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="bikeYear">ANNO</label>
+                                <input type="number" id="bikeYear" placeholder="2024" min="2000" max="2025" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="currentKm">KM ATTUALI</label>
+                                <input type="number" id="currentKm" placeholder="0" min="0" required>
+                            </div>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="currentKm">Chilometraggio attuale</label>
-                            <input type="number" id="currentKm" placeholder="15000" min="0" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="plateNumber">Targa (opzionale)</label>
-                            <input type="text" id="plateNumber" placeholder="AB123CD">
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary btn-large">
-                            Salva e inizia →
+                        <button type="submit" class="btn btn-primary btn-block">
+                            SALVA CONFIGURAZIONE
                         </button>
                     </form>
                 </div>
@@ -134,67 +106,118 @@
 
             <!-- Trips Screen -->
             <section id="tripsScreen" class="screen">
-                <div class="screen-header">
-                    <h2 class="screen-title">I tuoi viaggi</h2>
-                    <button class="btn btn-icon" onclick="showAddTrip()">
-                        <span class="icon">+</span>
+                <div class="screen-header-official">
+                    <h2 class="screen-title">RECORDED TOURS</h2>
+                    <button class="btn btn-icon-official" onclick="showAddTrip()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
                     </button>
                 </div>
                 
-                <div id="tripsList" class="trips-list">
+                <div id="tripsList" class="trips-list-official">
                     <!-- Viaggi popolati dinamicamente -->
                 </div>
                 
-                <div id="emptyTrips" class="empty-state">
-                    <span class="empty-icon">🏍️</span>
-                    <p class="empty-text">Nessun viaggio ancora</p>
+                <div id="emptyTrips" class="empty-state-official">
+                    <img src="bmw-logo.svg" alt="BMW" class="empty-logo">
+                    <p class="empty-text">Nessun tour registrato</p>
                     <button class="btn btn-primary" onclick="showAddTrip()">
-                        Aggiungi il primo viaggio
+                        AGGIUNGI TOUR
                     </button>
+                </div>
+            </section>
+
+            <!-- Trip Details Screen -->
+            <section id="tripDetailsScreen" class="screen">
+                <div class="screen-header-official">
+                    <button class="btn-back" onclick="backToTrips()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <h2 class="screen-title" id="tripDetailTitle">DETTAGLI TOUR</h2>
+                </div>
+                
+                <div id="tripDetailsContent" class="trip-details-content">
+                    <!-- Dettagli del viaggio -->
+                </div>
+                
+                <div class="photo-section">
+                    <div class="section-header">
+                        <h3>FOTO</h3>
+                        <input type="file" id="photoUpload" multiple accept="image/*" style="display: none;" onchange="uploadPhotos(event)">
+                        <button class="btn btn-small" onclick="document.getElementById('photoUpload').click()">
+                            + AGGIUNGI FOTO
+                        </button>
+                    </div>
+                    <div id="photoGallery" class="photo-gallery">
+                        <!-- Foto del viaggio -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Photo Viewer -->
+            <section id="photoViewerScreen" class="screen">
+                <div class="photo-viewer-header">
+                    <button class="btn-close-viewer" onclick="closePhotoViewer()">×</button>
+                </div>
+                <div class="photo-viewer-content">
+                    <img id="viewerImage" src="" alt="">
+                    <div class="photo-viewer-controls">
+                        <button onclick="previousPhoto()">←</button>
+                        <button onclick="nextPhoto()">→</button>
+                    </div>
                 </div>
             </section>
 
             <!-- Garage Screen -->
             <section id="garageScreen" class="screen">
-                <div class="garage-container">
-                    <div class="bike-card">
-                        <div class="bike-header">
-                            <h3 id="bikeName">La tua BMW</h3>
-                            <span class="bike-year" id="bikeYearDisplay">2023</span>
+                <div class="garage-container-official">
+                    <div class="bike-card-official">
+                        <img src="bmw-r850-gs.png" alt="BMW R 850 GS" class="garage-bike-image">
+                        <div class="bike-info">
+                            <h3 id="bikeName">R 850 GS</h3>
+                            <span class="bike-year" id="bikeYearDisplay">2024</span>
                         </div>
-                        <div class="bike-stats">
+                        <div class="bike-stats-grid">
                             <div class="bike-stat">
-                                <span class="stat-label">Chilometraggio</span>
-                                <span class="stat-value" id="bikeKm">0 km</span>
+                                <span class="stat-value" id="bikeKm">0</span>
+                                <span class="stat-label">KM TOTALI</span>
                             </div>
                             <div class="bike-stat">
-                                <span class="stat-label">Ultimo tagliando</span>
                                 <span class="stat-value" id="lastService">-</span>
+                                <span class="stat-label">ULTIMO SERVICE</span>
                             </div>
                             <div class="bike-stat">
-                                <span class="stat-label">Prossimo service</span>
                                 <span class="stat-value" id="nextService">-</span>
+                                <span class="stat-label">PROSSIMO SERVICE</span>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="section-header">
-                        <h3>Manutenzioni</h3>
-                        <button class="btn btn-small" onclick="showAddMaintenance()">+ Aggiungi</button>
-                    </div>
-                    <div id="maintenanceList" class="maintenance-list">
-                        <div class="empty-state-small">
-                            <p>Nessuna manutenzione registrata</p>
+                    <div class="section-container">
+                        <div class="section-header">
+                            <h3>MANUTENZIONI</h3>
+                            <button class="btn btn-small" onclick="showAddMaintenance()">+ AGGIUNGI</button>
+                        </div>
+                        <div id="maintenanceList" class="maintenance-list">
+                            <div class="empty-state-small">
+                                <p>Nessuna manutenzione</p>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="section-header">
-                        <h3>Rifornimenti</h3>
-                        <button class="btn btn-small" onclick="showAddFuel()">+ Aggiungi</button>
-                    </div>
-                    <div id="fuelList" class="fuel-list">
-                        <div class="empty-state-small">
-                            <p>Nessun rifornimento registrato</p>
+                    <div class="section-container">
+                        <div class="section-header">
+                            <h3>RIFORNIMENTI</h3>
+                            <button class="btn btn-small" onclick="showAddFuel()">+ AGGIUNGI</button>
+                        </div>
+                        <div id="fuelList" class="fuel-list">
+                            <div class="empty-state-small">
+                                <p>Nessun rifornimento</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -203,47 +226,35 @@
             <!-- Stats Screen -->
             <section id="statsScreen" class="screen">
                 <div class="stats-container">
-                    <h2 class="screen-title">Statistiche</h2>
+                    <div class="screen-header-official">
+                        <h2 class="screen-title">STATISTICHE</h2>
+                    </div>
                     
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <span class="stat-card-icon">🏍️</span>
-                            <span class="stat-card-value" id="statTotalTrips">0</span>
-                            <span class="stat-card-label">Viaggi totali</span>
+                    <div class="stats-grid-official">
+                        <div class="stat-card-official">
+                            <div class="stat-card-value" id="statTotalTrips">0</div>
+                            <div class="stat-card-label">TOURS</div>
                         </div>
-                        <div class="stat-card">
-                            <span class="stat-card-icon">📏</span>
-                            <span class="stat-card-value" id="statTotalKm">0</span>
-                            <span class="stat-card-label">Km percorsi</span>
+                        <div class="stat-card-official">
+                            <div class="stat-card-value" id="statTotalKm">0</div>
+                            <div class="stat-card-label">KM TOTALI</div>
                         </div>
-                        <div class="stat-card">
-                            <span class="stat-card-icon">⏱️</span>
-                            <span class="stat-card-value" id="statTotalHours">0h</span>
-                            <span class="stat-card-label">Ore in sella</span>
+                        <div class="stat-card-official">
+                            <div class="stat-card-value" id="statTotalHours">0h</div>
+                            <div class="stat-card-label">ORE DI GUIDA</div>
                         </div>
-                        <div class="stat-card">
-                            <span class="stat-card-icon">⛽</span>
-                            <span class="stat-card-value" id="statAvgConsumption">-</span>
-                            <span class="stat-card-label">Consumo medio</span>
+                        <div class="stat-card-official">
+                            <div class="stat-card-value" id="statAvgConsumption">-</div>
+                            <div class="stat-card-label">CONSUMO MEDIO</div>
                         </div>
                     </div>
                     
-                    <div class="chart-section">
-                        <h3>Viaggi per mese</h3>
-                        <div id="tripsChart" class="chart-placeholder">
-                            <p>Dati non sufficienti</p>
-                        </div>
-                    </div>
-                    
-                    <div class="section-header">
-                        <h3>Esporta dati</h3>
-                    </div>
                     <div class="export-section">
                         <button class="btn btn-secondary btn-block" onclick="exportData()">
-                            📥 Esporta backup JSON
+                            ESPORTA DATI
                         </button>
                         <button class="btn btn-secondary btn-block" onclick="importData()">
-                            📤 Importa backup
+                            IMPORTA DATI
                         </button>
                         <input type="file" id="importFile" accept=".json" style="display: none;" onchange="handleImport(event)">
                     </div>
@@ -253,18 +264,15 @@
         </main>
 
         <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
+        <nav class="bottom-nav-official">
             <button class="nav-item" onclick="showScreen('tripsScreen')" data-screen="tripsScreen">
-                <span class="nav-icon">🏍️</span>
-                <span class="nav-label">Viaggi</span>
+                <div class="nav-icon">TOURS</div>
             </button>
             <button class="nav-item" onclick="showScreen('garageScreen')" data-screen="garageScreen">
-                <span class="nav-icon">🔧</span>
-                <span class="nav-label">Garage</span>
+                <div class="nav-icon">GARAGE</div>
             </button>
             <button class="nav-item" onclick="showScreen('statsScreen')" data-screen="statsScreen">
-                <span class="nav-icon">📊</span>
-                <span class="nav-label">Stats</span>
+                <div class="nav-icon">STATS</div>
             </button>
         </nav>
 
@@ -272,53 +280,40 @@
 
     <!-- Modal per aggiungere viaggio -->
     <div id="addTripModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content-official">
             <div class="modal-header">
-                <h3>Nuovo viaggio</h3>
+                <h3>NUOVO TOUR</h3>
                 <button class="btn-close" onclick="closeModal('addTripModal')">×</button>
             </div>
             <form id="addTripForm" class="form" onsubmit="saveTrip(event)">
                 <div class="form-group">
-                    <label for="tripTitle">Nome viaggio</label>
-                    <input type="text" id="tripTitle" placeholder="Es: Weekend Dolomiti" required>
+                    <label>NOME TOUR</label>
+                    <input type="text" id="tripTitle" placeholder="Es: Dolomiti Adventure" required>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="tripDate">Data</label>
+                        <label>DATA</label>
                         <input type="date" id="tripDate" required>
                     </div>
                     <div class="form-group">
-                        <label for="tripDistance">Km percorsi</label>
-                        <input type="number" id="tripDistance" placeholder="250" min="0" required>
+                        <label>KM</label>
+                        <input type="number" id="tripDistance" placeholder="0" min="0" required>
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="tripDuration">Durata (ore)</label>
-                    <input type="number" id="tripDuration" placeholder="4.5" step="0.5" min="0">
+                    <label>DURATA (ORE)</label>
+                    <input type="number" id="tripDuration" placeholder="0" step="0.5" min="0">
                 </div>
                 
                 <div class="form-group">
-                    <label for="tripNotes">Note</label>
-                    <textarea id="tripNotes" placeholder="Strada fantastica, tempo perfetto..." rows="3"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="tripMood">Come ti sei sentito?</label>
-                    <div class="mood-selector">
-                        <button type="button" class="mood-btn" data-mood="😊" onclick="selectMood('😊')">😊</button>
-                        <button type="button" class="mood-btn" data-mood="😎" onclick="selectMood('😎')">😎</button>
-                        <button type="button" class="mood-btn" data-mood="🤩" onclick="selectMood('🤩')">🤩</button>
-                        <button type="button" class="mood-btn" data-mood="😌" onclick="selectMood('😌')">😌</button>
-                        <button type="button" class="mood-btn" data-mood="😮‍💨" onclick="selectMood('😮‍💨')">😮‍💨</button>
-                    </div>
-                    <input type="hidden" id="tripMood" value="😊">
+                    <label>NOTE</label>
+                    <textarea id="tripNotes" placeholder="Descrizione del tour..." rows="3"></textarea>
                 </div>
                 
                 <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" onclick="closeModal('addTripModal')">Annulla</button>
-                    <button type="submit" class="btn btn-primary">Salva viaggio</button>
+                    <button type="submit" class="btn btn-primary btn-block">SALVA TOUR</button>
                 </div>
             </form>
         </div>
@@ -326,14 +321,14 @@
 
     <!-- Modal per aggiungere manutenzione -->
     <div id="addMaintenanceModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content-official">
             <div class="modal-header">
-                <h3>Nuova manutenzione</h3>
+                <h3>NUOVA MANUTENZIONE</h3>
                 <button class="btn-close" onclick="closeModal('addMaintenanceModal')">×</button>
             </div>
             <form id="addMaintenanceForm" class="form" onsubmit="saveMaintenance(event)">
                 <div class="form-group">
-                    <label for="maintenanceType">Tipo</label>
+                    <label>TIPO</label>
                     <select id="maintenanceType" required>
                         <option value="service">Tagliando</option>
                         <option value="tire">Pneumatici</option>
@@ -346,28 +341,27 @@
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="maintenanceDate">Data</label>
+                        <label>DATA</label>
                         <input type="date" id="maintenanceDate" required>
                     </div>
                     <div class="form-group">
-                        <label for="maintenanceKm">Km</label>
-                        <input type="number" id="maintenanceKm" placeholder="15000" required>
+                        <label>KM</label>
+                        <input type="number" id="maintenanceKm" placeholder="0" required>
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="maintenanceCost">Costo (€)</label>
-                    <input type="number" id="maintenanceCost" placeholder="350.00" step="0.01" min="0">
+                    <label>COSTO (€)</label>
+                    <input type="number" id="maintenanceCost" placeholder="0.00" step="0.01" min="0">
                 </div>
                 
                 <div class="form-group">
-                    <label for="maintenanceNotes">Note</label>
+                    <label>NOTE</label>
                     <textarea id="maintenanceNotes" placeholder="Descrizione intervento..." rows="3"></textarea>
                 </div>
                 
                 <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" onclick="closeModal('addMaintenanceModal')">Annulla</button>
-                    <button type="submit" class="btn btn-primary">Salva</button>
+                    <button type="submit" class="btn btn-primary btn-block">SALVA</button>
                 </div>
             </form>
         </div>
@@ -375,47 +369,35 @@
 
     <!-- Modal per aggiungere rifornimento -->
     <div id="addFuelModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content-official">
             <div class="modal-header">
-                <h3>Nuovo rifornimento</h3>
+                <h3>NUOVO RIFORNIMENTO</h3>
                 <button class="btn-close" onclick="closeModal('addFuelModal')">×</button>
             </div>
             <form id="addFuelForm" class="form" onsubmit="saveFuel(event)">
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="fuelDate">Data</label>
+                        <label>DATA</label>
                         <input type="date" id="fuelDate" required>
                     </div>
                     <div class="form-group">
-                        <label for="fuelKm">Km</label>
-                        <input type="number" id="fuelKm" placeholder="15000" required>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="fuelLiters">Litri</label>
-                        <input type="number" id="fuelLiters" placeholder="18.5" step="0.1" min="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="fuelPrice">Prezzo/L (€)</label>
-                        <input type="number" id="fuelPrice" placeholder="1.85" step="0.01" min="0" required>
+                        <label>KM</label>
+                        <input type="number" id="fuelKm" placeholder="0" required>
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label>Costo totale</label>
+                    <label>LITRI</label>
+                    <input type="number" id="fuelLiters" placeholder="0" step="0.1" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>COSTO TOTALE</label>
                     <input type="text" id="fuelTotal" readonly placeholder="0.00 €">
                 </div>
                 
-                <div class="form-group">
-                    <label for="fuelNotes">Note</label>
-                    <input type="text" id="fuelNotes" placeholder="Stazione, località...">
-                </div>
-                
                 <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" onclick="closeModal('addFuelModal')">Annulla</button>
-                    <button type="submit" class="btn btn-primary">Salva</button>
+                    <button type="submit" class="btn btn-primary btn-block">SALVA</button>
                 </div>
             </form>
         </div>
@@ -424,7 +406,7 @@
     <!-- Toast notification -->
     <div id="toast" class="toast"></div>
 
-    <!-- Load scripts in correct order -->
+    <!-- Load scripts -->
     <script src="db.js"></script>
     <script src="app.js"></script>
 </body>
