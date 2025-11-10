@@ -260,14 +260,21 @@
                     </div>
                 </div>
             </section>
-// Funzione per aprire Explorer
-function openExplorer() {
-    // Salva lo stato corrente se necessario
-    localStorage.setItem('returnFromExplorer', 'true');
-    
-    // Apri Explorer
-    window.location.href = 'explorer.html';
-}
+            
+<!-- Nella sezione Stats o dove preferisci -->
+<div class="export-section">
+    <button class="btn btn-secondary btn-block" onclick="exportData()">
+        ESPORTA DATI
+    </button>
+    <button class="btn btn-secondary btn-block" onclick="importData()">
+        IMPORTA DATI
+    </button>
+    <!-- NUOVO PULSANTE EXPLORER -->
+    <button class="btn btn-primary btn-block" onclick="openExplorer()">
+        🗺️ APRI EXPLORER
+    </button>
+</div>
+            
         </main>
 
         <!-- Bottom Navigation -->
