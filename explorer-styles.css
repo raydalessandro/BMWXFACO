@@ -1,0 +1,711 @@
+/* BMW Motorrad Explorer - Styles */
+:root {
+    --bmw-black: #000000;
+    --bmw-white: #FFFFFF;
+    --bmw-gray-dark: #1C1C1C;
+    --bmw-gray-medium: #2D2D2D;
+    --bmw-gray-light: #4A4A4A;
+    --bmw-gray-lighter: #707070;
+    --bmw-blue: #0066B1;
+    --bmw-blue-light: #0099CC;
+    --text-primary: #FFFFFF;
+    --text-secondary: #999999;
+    --accent-yellow: #FFD700;
+    --accent-green: #4CAF50;
+    --border-color: #333333;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    background: var(--bmw-black);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--bmw-black);
+}
+
+/* Header */
+.header {
+    position: sticky;
+    top: 0;
+    background: var(--bmw-black);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem;
+    z-index: 1000;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.bmw-logo {
+    width: 40px;
+    height: 40px;
+}
+
+.app-name {
+    font-size: 1.125rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    color: var(--text-primary);
+}
+
+.header-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-icon-small {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--bmw-gray-light);
+    border-radius: 4px;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 60px;
+}
+
+.screen {
+    display: none;
+    min-height: calc(100vh - 120px);
+}
+
+.screen.active {
+    display: block;
+}
+
+/* Map Screen */
+.map-container {
+    position: relative;
+    height: calc(100vh - 120px);
+}
+
+.main-map {
+    width: 100%;
+    height: 100%;
+    background: var(--bmw-gray-dark);
+}
+
+.map-controls {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 500;
+}
+
+.map-btn {
+    width: 48px;
+    height: 48px;
+    background: var(--bmw-black);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.map-btn:hover {
+    background: var(--bmw-gray-dark);
+}
+
+.trips-panel {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--bmw-black);
+    border-top: 2px solid var(--bmw-blue);
+    max-height: 50vh;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    z-index: 600;
+}
+
+.trips-panel.active {
+    transform: translateY(0);
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.panel-header h3 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.trips-filter {
+    display: flex;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.filter-btn {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: 1px solid var(--bmw-gray-light);
+    color: var(--text-secondary);
+    border-radius: 20px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.filter-btn.active {
+    background: var(--bmw-blue);
+    color: white;
+    border-color: var(--bmw-blue);
+}
+
+.map-trips-list {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+/* Restaurants Screen */
+.screen-header-official {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bmw-gray-dark);
+}
+
+.screen-title {
+    font-size: 1.25rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.btn-icon-official {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--bmw-gray-light);
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.restaurants-filters {
+    padding: 1rem;
+    background: var(--bmw-gray-dark);
+}
+
+.filter-chips {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+
+.chip {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: 1px solid var(--bmw-gray-light);
+    border-radius: 20px;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.chip.active {
+    background: var(--bmw-blue);
+    color: white;
+    border-color: var(--bmw-blue);
+}
+
+.restaurants-list {
+    padding: 1rem;
+}
+
+.restaurant-card {
+    background: var(--bmw-gray-dark);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.restaurant-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.restaurant-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+}
+
+.restaurant-name {
+    font-size: 1.125rem;
+    font-weight: 400;
+    color: var(--text-primary);
+}
+
+.restaurant-rating {
+    color: var(--accent-yellow);
+    font-size: 0.875rem;
+}
+
+.restaurant-meta {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.restaurant-notes {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* Community Screen */
+.link-categories {
+    padding: 1rem;
+}
+
+.category-section {
+    margin-bottom: 2rem;
+}
+
+.category-title {
+    font-size: 0.875rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.links-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.link-card {
+    background: var(--bmw-gray-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.link-card:hover {
+    background: var(--bmw-gray-medium);
+    transform: translateY(-2px);
+}
+
+.link-card.preset {
+    border-color: var(--bmw-blue);
+}
+
+.link-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.link-name {
+    font-size: 0.875rem;
+    font-weight: 400;
+}
+
+/* Tools Screen */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.tool-card {
+    background: var(--bmw-gray-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tool-card:hover {
+    background: var(--bmw-gray-medium);
+    transform: translateY(-2px);
+}
+
+.tool-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.tool-name {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.tool-desc {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* Rating Selector */
+.rating-selector {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.star {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0.3;
+    transition: all 0.2s ease;
+}
+
+.star.selected {
+    opacity: 1;
+}
+
+.star:hover {
+    transform: scale(1.1);
+}
+
+/* Icon Selector */
+.icon-selector {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.icon-btn {
+    width: 48px;
+    height: 48px;
+    background: var(--bmw-gray-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.icon-btn.selected {
+    border-color: var(--bmw-blue);
+    background: var(--bmw-gray-medium);
+}
+
+/* Forms */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+label {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+input, select, textarea {
+    padding: 1rem;
+    background: var(--bmw-gray-dark);
+    border: 1px solid var(--bmw-gray-light);
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--bmw-white);
+    background: var(--bmw-gray-medium);
+}
+
+/* Buttons */
+.btn {
+    padding: 1rem 2rem;
+    border: none;
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    text-align: center;
+}
+
+.btn-primary {
+    background: var(--bmw-white);
+    color: var(--bmw-black);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--bmw-gray-light);
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.btn-close {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content-official {
+    background: var(--bmw-black);
+    border: 1px solid var(--border-color);
+    width: 100%;
+    max-width: 420px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bmw-gray-dark);
+}
+
+.modal-header h3 {
+    font-size: 1rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.modal-content-official .form {
+    padding: 1.5rem;
+}
+
+.form-actions {
+    margin-top: 1.5rem;
+}
+
+/* Bottom Navigation */
+.bottom-nav-official {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    background: var(--bmw-black);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-around;
+    padding: 0;
+    z-index: 100;
+}
+
+.nav-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 1rem 0;
+    transition: all 0.2s ease;
+    border-right: 1px solid var(--border-color);
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.nav-item:last-child {
+    border-right: none;
+}
+
+.nav-item.active {
+    color: var(--text-primary);
+    background: var(--bmw-gray-dark);
+}
+
+.nav-icon {
+    font-weight: 400;
+}
+
+/* Toast */
+.toast {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--bmw-white);
+    color: var(--bmw-black);
+    padding: 1rem 2rem;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    z-index: 3000;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Empty State */
+.empty-state-official {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    opacity: 0.3;
+    margin-bottom: 1rem;
+}
+
+.empty-text {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Leaflet Overrides */
+.leaflet-control-container {
+    display: none;
+}
+
+.leaflet-popup-content-wrapper {
+    background: var(--bmw-gray-dark);
+    color: var(--text-primary);
+    border-radius: 4px;
+}
+
+.leaflet-popup-tip {
+    background: var(--bmw-gray-dark);
+}
+
+/* Responsive */
+@media (max-width: 375px) {
+    .links-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tools-grid {
+        grid-template-columns: 1fr;
+    }
+}
