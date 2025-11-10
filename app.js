@@ -1,13 +1,18 @@
-// BMW Soul - Main Application Logic
+// BMW Motorrad - Official App Logic
+
+// Constants
+const FUEL_PRICE_PER_LITER = 1.7; // Fixed fuel price
 
 // State
 let currentScreen = 'welcomeScreen';
 let profile = null;
-let selectedMood = '😊';
+let currentTripId = null;
+let currentPhotoIndex = 0;
+let currentTripPhotos = [];
 
 // Initialize app
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log('BMW Soul - Initializing...');
+    console.log('BMW Motorrad - Initializing...');
     
     // Check if profile exists
     profile = await db.getProfile();
@@ -22,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         showScreen('welcomeScreen');
     }
     
-    // Setup fuel calculation
+    // Setup fuel calculation with fixed price
     setupFuelCalculation();
     
     // Set today's date as default
@@ -75,10 +80,10 @@ document.getElementById('setupForm')?.addEventListener('submit', async (e) => {
     
     const formData = {
         riderName: document.getElementById('riderName').value,
-        bikeModel: document.getElementById('bikeModel').value,
+        bikeModel: document.getElementById('bikeModel').value || 'R 850 GS',
         bikeYear: parseInt(document.getElementById('bikeYear').value),
         currentKm: parseInt(document.getElementById('currentKm').value),
-        plateNumber: document.getElementById('plateNumber').value
+        plateNumber: document.getElementById('plateNumber')?.value || ''
     };
     
     // Save profile
@@ -86,7 +91,7 @@ document.getElementById('setupForm')?.addEventListener('submit', async (e) => {
     profile = formData;
     
     // Show success toast
-    showToast('Profilo salvato! 🎉');
+    showToast('CONFIGURAZIONE SALVATA');
     
     // Go to trips screen
     setTimeout(() => {
@@ -119,32 +124,138 @@ async function loadTrips() {
         emptyTrips.style.display = 'none';
         
         tripsList.innerHTML = trips.map(trip => `
-            <div class="trip-card" onclick="showTripDetails('${trip.id}')">
-                <div class="trip-header">
-                    <div class="trip-title">${trip.title}</div>
-                    <div class="trip-mood">${trip.mood || '😊'}</div>
-                </div>
-                <div class="trip-date">${formatDate(trip.startDate)}</div>
-                <div class="trip-stats">
-                    <div class="trip-stat">
-                        <span class="trip-stat-icon">📏</span>
-                        <span class="trip-stat-value">${trip.distance} km</span>
+            <div class="trip-card-official" onclick="showTripDetails('${trip.id}')">
+                <div class="trip-info">
+                    <div class="trip-title-official">${trip.title}</div>
+                    <div class="trip-meta">
+                        <span>${formatDate(trip.startDate)}</span>
+                        <span>${trip.distance} km</span>
+                        ${trip.duration ? `<span>${trip.duration}h</span>` : ''}
                     </div>
-                    ${trip.duration ? `
-                    <div class="trip-stat">
-                        <span class="trip-stat-icon">⏱️</span>
-                        <span class="trip-stat-value">${trip.duration}h</span>
-                    </div>
-                    ` : ''}
                 </div>
-                ${trip.notes ? `
-                <div class="trip-notes">${trip.notes}</div>
-                ` : ''}
+                <div class="trip-arrow">→</div>
             </div>
         `).join('');
     }
     
     loadDashboardData();
+}
+
+// Trip Details with Photo Gallery
+async function showTripDetails(tripId) {
+    currentTripId = tripId;
+    const trip = await db.getTrip(tripId);
+    
+    if (!trip) return;
+    
+    // Update trip details
+    document.getElementById('tripDetailTitle').textContent = trip.title;
+    
+    const detailsContent = document.getElementById('tripDetailsContent');
+    detailsContent.innerHTML = `
+        <div class="trip-detail-stats">
+            <div class="detail-row">
+                <span class="detail-label">DATA</span>
+                <span class="detail-value">${formatDate(trip.startDate)}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">DISTANZA</span>
+                <span class="detail-value">${trip.distance} km</span>
+            </div>
+            ${trip.duration ? `
+            <div class="detail-row">
+                <span class="detail-label">DURATA</span>
+                <span class="detail-value">${trip.duration} ore</span>
+            </div>
+            ` : ''}
+            ${trip.notes ? `
+            <div class="detail-row">
+                <span class="detail-label">NOTE</span>
+                <span class="detail-value">${trip.notes}</span>
+            </div>
+            ` : ''}
+        </div>
+    `;
+    
+    // Load photos
+    await loadTripPhotos(tripId);
+    
+    showScreen('tripDetailsScreen');
+}
+
+async function loadTripPhotos(tripId) {
+    const photos = await db.getTripPhotos(tripId);
+    const gallery = document.getElementById('photoGallery');
+    
+    if (photos.length === 0) {
+        gallery.innerHTML = '<div class="empty-state-small"><p>Nessuna foto</p></div>';
+    } else {
+        currentTripPhotos = photos;
+        gallery.innerHTML = photos.map((photo, index) => `
+            <div class="photo-thumbnail" onclick="viewPhoto(${index})">
+                <img src="${photo.url}" alt="Photo ${index + 1}">
+            </div>
+        `).join('');
+    }
+}
+
+async function uploadPhotos(event) {
+    const files = event.target.files;
+    if (!files || !currentTripId) return;
+    
+    for (const file of files) {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            await db.addTripPhoto(currentTripId, {
+                url: e.target.result,
+                uploadedAt: new Date().toISOString()
+            });
+        };
+        reader.readAsDataURL(file);
+    }
+    
+    // Reload photos after upload
+    setTimeout(() => {
+        loadTripPhotos(currentTripId);
+        showToast('FOTO AGGIUNTE');
+    }, 500);
+    
+    // Reset input
+    event.target.value = '';
+}
+
+function viewPhoto(index) {
+    currentPhotoIndex = index;
+    const photo = currentTripPhotos[index];
+    
+    if (!photo) return;
+    
+    document.getElementById('viewerImage').src = photo.url;
+    showScreen('photoViewerScreen');
+}
+
+function closePhotoViewer() {
+    showScreen('tripDetailsScreen');
+}
+
+function previousPhoto() {
+    if (currentPhotoIndex > 0) {
+        currentPhotoIndex--;
+        document.getElementById('viewerImage').src = currentTripPhotos[currentPhotoIndex].url;
+    }
+}
+
+function nextPhoto() {
+    if (currentPhotoIndex < currentTripPhotos.length - 1) {
+        currentPhotoIndex++;
+        document.getElementById('viewerImage').src = currentTripPhotos[currentPhotoIndex].url;
+    }
+}
+
+function backToTrips() {
+    currentTripId = null;
+    currentTripPhotos = [];
+    showScreen('tripsScreen');
 }
 
 function showAddTrip() {
@@ -160,8 +271,7 @@ async function saveTrip(e) {
         startDate: document.getElementById('tripDate').value,
         distance: parseFloat(document.getElementById('tripDistance').value),
         duration: parseFloat(document.getElementById('tripDuration').value) || null,
-        notes: document.getElementById('tripNotes').value,
-        mood: document.getElementById('tripMood').value
+        notes: document.getElementById('tripNotes').value
     };
     
     await db.addTrip(trip);
@@ -170,49 +280,35 @@ async function saveTrip(e) {
     e.target.reset();
     closeModal('addTripModal');
     
-    showToast('Viaggio salvato! 🏍️');
+    showToast('TOUR SALVATO');
     loadTrips();
-}
-
-function showTripDetails(tripId) {
-    // TODO: Implement trip details view
-    showToast('Dettagli viaggio - Coming soon!');
-}
-
-// Mood selector
-function selectMood(mood) {
-    selectedMood = mood;
-    document.getElementById('tripMood').value = mood;
-    
-    // Update UI
-    document.querySelectorAll('.mood-btn').forEach(btn => {
-        btn.classList.remove('selected');
-        if (btn.getAttribute('data-mood') === mood) {
-            btn.classList.add('selected');
-        }
-    });
 }
 
 // Garage
 async function loadGarage() {
-    if (!profile) return;
+    if (!profile) {
+        profile = await db.getProfile();
+        if (!profile) return;
+    }
     
     // Update bike info
-    document.getElementById('bikeName').textContent = profile.bikeModel;
-    document.getElementById('bikeYearDisplay').textContent = profile.bikeYear;
+    document.getElementById('bikeName').textContent = profile.bikeModel || 'R 850 GS';
+    document.getElementById('bikeYearDisplay').textContent = profile.bikeYear || '2024';
     
     // Calculate current km from profile + trips
     const trips = await db.getAllTrips();
     const totalTripKm = trips.reduce((sum, trip) => sum + (trip.distance || 0), 0);
     const currentKm = (profile.currentKm || 0) + totalTripKm;
-    document.getElementById('bikeKm').textContent = currentKm.toLocaleString('it-IT') + ' km';
+    document.getElementById('bikeKm').textContent = currentKm.toLocaleString('it-IT');
     
     // Load maintenance
     const maintenance = await db.getAllMaintenance();
     const maintenanceList = document.getElementById('maintenanceList');
     
     if (maintenance.length === 0) {
-        maintenanceList.innerHTML = '<div class="empty-state-small"><p>Nessuna manutenzione registrata</p></div>';
+        maintenanceList.innerHTML = '<div class="empty-state-small"><p>Nessuna manutenzione</p></div>';
+        document.getElementById('lastService').textContent = '-';
+        document.getElementById('nextService').textContent = '-';
     } else {
         // Get last service
         const lastService = maintenance.find(m => m.type === 'service');
@@ -222,7 +318,7 @@ async function loadGarage() {
             // Calculate next service (every 10,000 km)
             const nextServiceKm = Math.ceil(lastService.km / 10000) * 10000;
             const remainingKm = nextServiceKm - currentKm;
-            document.getElementById('nextService').textContent = `tra ${remainingKm} km`;
+            document.getElementById('nextService').textContent = `${remainingKm} km`;
         }
         
         maintenanceList.innerHTML = maintenance.slice(0, 5).map(m => `
@@ -235,7 +331,7 @@ async function loadGarage() {
                     <span>${formatDate(m.date)}</span>
                     <span>${m.km.toLocaleString('it-IT')} km</span>
                 </div>
-                ${m.notes ? `<div style="margin-top: 0.5rem; font-size: 0.875rem; color: var(--text-secondary);">${m.notes}</div>` : ''}
+                ${m.notes ? `<div style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-secondary);">${m.notes}</div>` : ''}
             </div>
         `).join('');
     }
@@ -245,7 +341,7 @@ async function loadGarage() {
     const fuelList = document.getElementById('fuelList');
     
     if (fuel.length === 0) {
-        fuelList.innerHTML = '<div class="empty-state-small"><p>Nessun rifornimento registrato</p></div>';
+        fuelList.innerHTML = '<div class="empty-state-small"><p>Nessun rifornimento</p></div>';
     } else {
         fuelList.innerHTML = fuel.slice(0, 5).map(f => `
             <div class="fuel-item">
@@ -255,7 +351,7 @@ async function loadGarage() {
                 </div>
                 <div class="fuel-meta">
                     <span>${f.liters.toFixed(1)} L</span>
-                    <span>${f.pricePerLiter.toFixed(2)} €/L</span>
+                    <span>${FUEL_PRICE_PER_LITER.toFixed(2)} €/L</span>
                     <span>${f.km.toLocaleString('it-IT')} km</span>
                 </div>
             </div>
@@ -289,7 +385,7 @@ async function saveMaintenance(e) {
     e.target.reset();
     closeModal('addMaintenanceModal');
     
-    showToast('Manutenzione salvata! 🔧');
+    showToast('MANUTENZIONE SALVATA');
     loadGarage();
 }
 
@@ -305,35 +401,31 @@ function showAddFuel() {
 
 function setupFuelCalculation() {
     const litersInput = document.getElementById('fuelLiters');
-    const priceInput = document.getElementById('fuelPrice');
-    const totalInput = document.getElementById('fuelTotal');
     
     function calculateTotal() {
         const liters = parseFloat(litersInput?.value) || 0;
-        const price = parseFloat(priceInput?.value) || 0;
-        const total = liters * price;
+        const total = liters * FUEL_PRICE_PER_LITER;
+        const totalInput = document.getElementById('fuelTotal');
         if (totalInput) {
             totalInput.value = total.toFixed(2) + ' €';
         }
     }
     
     litersInput?.addEventListener('input', calculateTotal);
-    priceInput?.addEventListener('input', calculateTotal);
 }
 
 async function saveFuel(e) {
     e.preventDefault();
     
     const liters = parseFloat(document.getElementById('fuelLiters').value);
-    const pricePerLiter = parseFloat(document.getElementById('fuelPrice').value);
     
     const fuel = {
         date: document.getElementById('fuelDate').value,
         km: parseInt(document.getElementById('fuelKm').value),
         liters: liters,
-        pricePerLiter: pricePerLiter,
-        totalCost: liters * pricePerLiter,
-        notes: document.getElementById('fuelNotes').value
+        pricePerLiter: FUEL_PRICE_PER_LITER,
+        totalCost: liters * FUEL_PRICE_PER_LITER,
+        notes: ''
     };
     
     await db.addFuel(fuel);
@@ -341,7 +433,7 @@ async function saveFuel(e) {
     e.target.reset();
     closeModal('addFuelModal');
     
-    showToast('Rifornimento salvato! ⛽');
+    showToast('RIFORNIMENTO SALVATO');
     loadGarage();
 }
 
@@ -381,15 +473,15 @@ async function exportData() {
         const url = URL.createObjectURL(dataBlob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `bmw-soul-backup-${new Date().toISOString().split('T')[0]}.json`;
+        link.download = `bmw-motorrad-backup-${new Date().toISOString().split('T')[0]}.json`;
         link.click();
         
         URL.revokeObjectURL(url);
         
-        showToast('Backup esportato! 📥');
+        showToast('BACKUP ESPORTATO');
     } catch (error) {
         console.error('Export error:', error);
-        showToast('Errore durante l\'esportazione ❌');
+        showToast('ERRORE ESPORTAZIONE');
     }
 }
 
@@ -408,7 +500,7 @@ async function handleImport(event) {
         const success = await db.importAllData(data);
         
         if (success) {
-            showToast('Backup importato! 📤');
+            showToast('BACKUP IMPORTATO');
             
             // Reload current screen
             if (currentScreen === 'tripsScreen') {
@@ -423,11 +515,11 @@ async function handleImport(event) {
             profile = await db.getProfile();
             loadDashboardData();
         } else {
-            showToast('Errore durante l\'importazione ❌');
+            showToast('ERRORE IMPORTAZIONE');
         }
     } catch (error) {
         console.error('Import error:', error);
-        showToast('File non valido ❌');
+        showToast('FILE NON VALIDO');
     }
     
     // Reset input
@@ -498,4 +590,4 @@ if ('serviceWorker' in navigator) {
             .then(reg => console.log('Service Worker registered:', reg))
             .catch(err => console.log('Service Worker registration failed:', err));
     });
-      }
+        }
