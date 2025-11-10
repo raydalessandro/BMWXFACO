@@ -591,3 +591,12 @@ if ('serviceWorker' in navigator) {
             .catch(err => console.log('Service Worker registration failed:', err));
     });
         }
+
+// Funzione per aprire Explorer
+function openExplorer() {
+    // Salva lo stato corrente se necessario
+    localStorage.setItem('returnFromExplorer', 'true');
+    
+    // Apri Explorer
+    window.location.href = 'explorer.html';
+}
