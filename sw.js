@@ -1,13 +1,15 @@
-// BMW Soul - Service Worker
+// BMW Motorrad - Service Worker
 
-const CACHE_NAME = 'bmw-soul-v1';
+const CACHE_NAME = 'bmw-motorrad-v2';
 const urlsToCache = [
     '/',
     '/index.html',
     '/styles.css',
     '/app.js',
     '/db.js',
-    '/manifest.json'
+    '/manifest.json',
+    '/bmw-logo.svg',
+    '/bmw-r850-gs.png'
 ];
 
 // Install event - cache resources
