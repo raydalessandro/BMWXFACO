@@ -1,13 +1,13 @@
-// BMW Soul - Database Layer (IndexedDB)
+// BMW Motorrad - Database Layer (IndexedDB)
 
 class BMWDatabase {
     constructor() {
-        this.dbName = 'bmw-soul-db';
-        this.version = 1;
+        this.dbName = 'bmw-motorrad-db';
+        this.version = 2; // Incremented for photos support
         this.db = null;
     }
 
-    // Inizializza il database
+    // Initialize database
     async init() {
         return new Promise((resolve, reject) => {
             const request = indexedDB.open(this.dbName, this.version);
@@ -31,6 +31,12 @@ class BMWDatabase {
                     const tripStore = db.createObjectStore('trips', { keyPath: 'id' });
                     tripStore.createIndex('date', 'startDate', { unique: false });
                     tripStore.createIndex('distance', 'distance', { unique: false });
+                }
+                
+                // Trip Photos store (NEW)
+                if (!db.objectStoreNames.contains('tripPhotos')) {
+                    const photoStore = db.createObjectStore('tripPhotos', { keyPath: 'id' });
+                    photoStore.createIndex('tripId', 'tripId', { unique: false });
                 }
                 
                 // Maintenance store
@@ -95,6 +101,20 @@ class BMWDatabase {
         });
     }
 
+    // Get all by index
+    async getAllByIndex(storeName, indexName, value) {
+        await this.init();
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction([storeName], 'readonly');
+            const store = transaction.objectStore(storeName);
+            const index = store.index(indexName);
+            const request = index.getAll(value);
+            
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
     // Generic update method
     async update(storeName, data) {
         await this.init();
@@ -151,13 +171,40 @@ class BMWDatabase {
         return this.add('trips', trip);
     }
 
+    async getTrip(id) {
+        return this.get('trips', id);
+    }
+
     async getAllTrips() {
         const trips = await this.getAll('trips');
         return trips.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
     }
 
     async deleteTrip(id) {
+        // Delete trip and associated photos
+        const photos = await this.getTripPhotos(id);
+        for (const photo of photos) {
+            await this.delete('tripPhotos', photo.id);
+        }
         return this.delete('trips', id);
+    }
+
+    // Trip Photos methods (NEW)
+    async addTripPhoto(tripId, photoData) {
+        const photo = {
+            id: 'photo-' + Date.now() + '-' + Math.random(),
+            tripId: tripId,
+            ...photoData
+        };
+        return this.add('tripPhotos', photo);
+    }
+
+    async getTripPhotos(tripId) {
+        return this.getAllByIndex('tripPhotos', 'tripId', tripId);
+    }
+
+    async deletePhoto(id) {
+        return this.delete('tripPhotos', id);
     }
 
     // Maintenance methods
@@ -197,9 +244,10 @@ class BMWDatabase {
         await this.init();
         const data = {
             exportDate: new Date().toISOString(),
-            appVersion: '1.0.0',
+            appVersion: '2.0.0',
             profile: await this.getProfile(),
             trips: await this.getAllTrips(),
+            tripPhotos: await this.getAll('tripPhotos'),
             maintenance: await this.getAllMaintenance(),
             fuel: await this.getAllFuel()
         };
@@ -213,6 +261,7 @@ class BMWDatabase {
             
             // Clear existing data
             await this.clear('trips');
+            await this.clear('tripPhotos');
             await this.clear('maintenance');
             await this.clear('fuel');
             
@@ -225,6 +274,13 @@ class BMWDatabase {
             if (data.trips && data.trips.length > 0) {
                 for (const trip of data.trips) {
                     await this.add('trips', trip);
+                }
+            }
+            
+            // Import trip photos
+            if (data.tripPhotos && data.tripPhotos.length > 0) {
+                for (const photo of data.tripPhotos) {
+                    await this.add('tripPhotos', photo);
                 }
             }
             
