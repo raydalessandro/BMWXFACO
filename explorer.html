@@ -46,8 +46,123 @@
         <!-- Main Content -->
         <main class="main-content">
             
-            <!-- Map Screen -->
-            <section id="mapScreen" class="screen active">
+            <!-- Home Screen with All Sections Visible -->
+            <section id="homeScreen" class="screen active">
+                
+                <!-- Quick Actions Section -->
+                <div class="quick-actions-section">
+                    <h3 class="section-title">AZIONI RAPIDE</h3>
+                    <div class="quick-actions-grid">
+                        <button class="action-card" onclick="openMap()">
+                            <span class="action-icon">🗺️</span>
+                            <span class="action-name">Apri Mappa</span>
+                            <span class="action-desc">Vedi ristoranti vicini</span>
+                        </button>
+                        <button class="action-card" onclick="showAddRestaurant()">
+                            <span class="action-icon">➕</span>
+                            <span class="action-name">Aggiungi Posto</span>
+                            <span class="action-desc">Salva nuovo ristorante</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Restaurants Section -->
+                <div class="section-container">
+                    <div class="section-header">
+                        <h3 class="section-title">🍽️ RISTORANTI SALVATI</h3>
+                        <button class="btn-text" onclick="showAllRestaurants()">Vedi tutti</button>
+                    </div>
+                    
+                    <div class="restaurants-filters">
+                        <div class="filter-chips">
+                            <button class="chip active" onclick="filterRestaurants('all')">Tutti</button>
+                            <button class="chip" onclick="filterRestaurants('5stars')">⭐ Top</button>
+                            <button class="chip" onclick="filterRestaurants('pizza')">🍕 Pizza</button>
+                            <button class="chip" onclick="filterRestaurants('traditional')">🍝 Tipico</button>
+                            <button class="chip" onclick="filterRestaurants('quick')">⚡ Veloce</button>
+                        </div>
+                    </div>
+                    
+                    <div id="restaurantsList" class="restaurants-list">
+                        <!-- Restaurants will be loaded here -->
+                    </div>
+                    
+                    <div id="emptyRestaurants" class="empty-state-small" style="display: none;">
+                        <p>Nessun ristorante salvato</p>
+                        <button class="btn btn-primary btn-small" onclick="showAddRestaurant()">
+                            AGGIUNGI RISTORANTE
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Community Links Section -->
+                <div class="section-container">
+                    <div class="section-header">
+                        <h3 class="section-title">🔗 COMMUNITY & LINK</h3>
+                        <button class="btn-text" onclick="showAddLink()">+ Aggiungi</button>
+                    </div>
+                    
+                    <div class="links-preview">
+                        <a href="https://www.bmw-motorrad.com" target="_blank" class="link-card-small">
+                            <span class="link-icon">🏍️</span>
+                            <span class="link-name">BMW Official</span>
+                        </a>
+                        <a href="https://www.advrider.com" target="_blank" class="link-card-small">
+                            <span class="link-icon">🌍</span>
+                            <span class="link-name">ADV Rider</span>
+                        </a>
+                        <div id="userLinksPreview">
+                            <!-- User links preview -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tools Section -->
+                <div class="section-container">
+                    <div class="section-header">
+                        <h3 class="section-title">🔧 STRUMENTI UTILI</h3>
+                    </div>
+                    
+                    <div class="tools-grid-home">
+                        <div class="tool-card-small" onclick="showTireCalculator()">
+                            <span class="tool-icon">⚙️</span>
+                            <span class="tool-name">Pressione</span>
+                        </div>
+                        <div class="tool-card-small" onclick="showFuelCalculator()">
+                            <span class="tool-icon">⛽</span>
+                            <span class="tool-name">Autonomia</span>
+                        </div>
+                        <div class="tool-card-small" onclick="showPackingList()">
+                            <span class="tool-icon">🎒</span>
+                            <span class="tool-name">Checklist</span>
+                        </div>
+                        <div class="tool-card-small" onclick="showWeather()">
+                            <span class="tool-icon">🌤️</span>
+                            <span class="tool-name">Meteo</span>
+                        </div>
+                        <div class="tool-card-small" onclick="showEmergency()">
+                            <span class="tool-icon">🆘</span>
+                            <span class="tool-name">SOS</span>
+                        </div>
+                        <div class="tool-card-small" onclick="showConverter()">
+                            <span class="tool-icon">🔄</span>
+                            <span class="tool-name">Convert</span>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Map Screen (Hidden by default) -->
+            <section id="mapScreen" class="screen">
+                <div class="map-header">
+                    <button class="btn-back" onclick="closeMap()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <h2 class="map-title">MAPPA RISTORANTI</h2>
+                </div>
                 <div class="map-container">
                     <div id="mainMap" class="main-map"></div>
                     <div class="map-controls">
@@ -62,172 +177,11 @@
                                 <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5z"/>
                             </svg>
                         </button>
-                        <button class="map-btn" onclick="showTripsList()">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Trips Filter Panel -->
-                <div id="tripsPanel" class="trips-panel">
-                    <div class="panel-header">
-                        <h3>VIAGGI SULLA MAPPA</h3>
-                        <button class="btn-close" onclick="closeTripsList()">×</button>
-                    </div>
-                    <div class="trips-filter">
-                        <button class="filter-btn active" onclick="filterTrips('all')">Tutti</button>
-                        <button class="filter-btn" onclick="filterTrips('recent')">Recenti</button>
-                        <button class="filter-btn" onclick="filterTrips('favorite')">Preferiti</button>
-                    </div>
-                    <div id="mapTripsList" class="map-trips-list">
-                        <!-- Trips will be loaded here -->
-                    </div>
-                </div>
-            </section>
-
-            <!-- Restaurants Screen -->
-            <section id="restaurantsScreen" class="screen">
-                <div class="screen-header-official">
-                    <h2 class="screen-title">RISTORANTI</h2>
-                    <button class="btn-icon-official" onclick="showAddRestaurant()">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                    </button>
-                </div>
-                
-                <div class="restaurants-filters">
-                    <div class="filter-chips">
-                        <button class="chip active" onclick="filterRestaurants('all')">Tutti</button>
-                        <button class="chip" onclick="filterRestaurants('5stars')">⭐ Top</button>
-                        <button class="chip" onclick="filterRestaurants('pizza')">🍕 Pizza</button>
-                        <button class="chip" onclick="filterRestaurants('traditional')">🍝 Tipico</button>
-                        <button class="chip" onclick="filterRestaurants('quick')">⚡ Veloce</button>
-                    </div>
-                </div>
-                
-                <div id="restaurantsList" class="restaurants-list">
-                    <!-- Restaurants will be loaded here -->
-                </div>
-                
-                <div id="emptyRestaurants" class="empty-state-official" style="display: none;">
-                    <span class="empty-icon">🍽️</span>
-                    <p class="empty-text">Nessun ristorante salvato</p>
-                    <button class="btn btn-primary" onclick="showAddRestaurant()">
-                        AGGIUNGI RISTORANTE
-                    </button>
-                </div>
-            </section>
-
-            <!-- Community Screen -->
-            <section id="communityScreen" class="screen">
-                <div class="screen-header-official">
-                    <h2 class="screen-title">COMMUNITY</h2>
-                    <button class="btn-icon-official" onclick="showAddLink()">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                    </button>
-                </div>
-                
-                <div class="link-categories">
-                    <div class="category-section">
-                        <h3 class="category-title">FORUM & COMMUNITY</h3>
-                        <div id="forumLinks" class="links-grid">
-                            <!-- Preset BMW forums -->
-                            <a href="https://www.bmw-motorrad.com" target="_blank" class="link-card preset">
-                                <span class="link-icon">🏍️</span>
-                                <span class="link-name">BMW Motorrad Official</span>
-                            </a>
-                            <a href="https://www.advrider.com" target="_blank" class="link-card preset">
-                                <span class="link-icon">🌍</span>
-                                <span class="link-name">ADV Rider Forum</span>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div class="category-section">
-                        <h3 class="category-title">RISORSE UTILI</h3>
-                        <div id="resourceLinks" class="links-grid">
-                            <!-- User added links -->
-                        </div>
-                    </div>
-                    
-                    <div class="category-section">
-                        <h3 class="category-title">I MIEI LINK</h3>
-                        <div id="customLinks" class="links-grid">
-                            <!-- User custom links -->
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Tools Screen -->
-            <section id="toolsScreen" class="screen">
-                <div class="screen-header-official">
-                    <h2 class="screen-title">TOOLS</h2>
-                </div>
-                
-                <div class="tools-grid">
-                    <div class="tool-card" onclick="showTireCalculator()">
-                        <span class="tool-icon">⚙️</span>
-                        <span class="tool-name">Pressione Gomme</span>
-                        <span class="tool-desc">Calcola la pressione ideale</span>
-                    </div>
-                    
-                    <div class="tool-card" onclick="showFuelCalculator()">
-                        <span class="tool-icon">⛽</span>
-                        <span class="tool-name">Autonomia</span>
-                        <span class="tool-desc">Calcola km rimanenti</span>
-                    </div>
-                    
-                    <div class="tool-card" onclick="showPackingList()">
-                        <span class="tool-icon">🎒</span>
-                        <span class="tool-name">Checklist Viaggio</span>
-                        <span class="tool-desc">Lista preparazione</span>
-                    </div>
-                    
-                    <div class="tool-card" onclick="showWeather()">
-                        <span class="tool-icon">🌤️</span>
-                        <span class="tool-name">Meteo Percorso</span>
-                        <span class="tool-desc">Previsioni sul tragitto</span>
-                    </div>
-                    
-                    <div class="tool-card" onclick="showEmergency()">
-                        <span class="tool-icon">🆘</span>
-                        <span class="tool-name">Numeri Utili</span>
-                        <span class="tool-desc">Emergenze e assistenza</span>
-                    </div>
-                    
-                    <div class="tool-card" onclick="showConverter()">
-                        <span class="tool-icon">🔄</span>
-                        <span class="tool-name">Convertitore</span>
-                        <span class="tool-desc">Miglia/Km, PSI/Bar</span>
                     </div>
                 </div>
             </section>
 
         </main>
-
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav-official">
-            <button class="nav-item active" onclick="showScreen('mapScreen')" data-screen="mapScreen">
-                <span class="nav-icon">MAPPA</span>
-            </button>
-            <button class="nav-item" onclick="showScreen('restaurantsScreen')" data-screen="restaurantsScreen">
-                <span class="nav-icon">RISTORANTI</span>
-            </button>
-            <button class="nav-item" onclick="showScreen('communityScreen')" data-screen="communityScreen">
-                <span class="nav-icon">COMMUNITY</span>
-            </button>
-            <button class="nav-item" onclick="showScreen('toolsScreen')" data-screen="toolsScreen">
-                <span class="nav-icon">TOOLS</span>
-            </button>
-        </nav>
 
     </div>
 
@@ -347,6 +301,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <!-- App Scripts -->
+    <script src="db.js"></script>
     <script src="explorer-db.js"></script>
     <script src="explorer-app.js"></script>
 </body>
